@@ -31,8 +31,7 @@ class TodoInMemoryDAO : TodoDAO {
         if (toDo == null) {
             return false
         }
-        val newTodo = toDo.copy(done = done)
-        data[id] = newTodo
+        data[id] = toDo.copy(done = done)
         return true
     }
 
