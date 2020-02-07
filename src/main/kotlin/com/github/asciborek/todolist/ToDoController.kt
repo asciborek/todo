@@ -10,11 +10,6 @@ import org.springframework.web.util.UriComponentsBuilder
 @RestController
 class ToDoController(private val dao: TodoDAO) {
 
-    @GetMapping("priorities")
-    fun getAllPriorities() : Collection<Priority> {
-        return Priority.values().asList();
-    }
-
     @GetMapping("/todos/{id}")
     fun getOne(@PathVariable("id") id: Int): ResponseEntity<*> {
         val todo = dao.findById(id)
