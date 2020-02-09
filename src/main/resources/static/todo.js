@@ -14,13 +14,10 @@ function loadTodos() {
 function renderTodos(toDos) {
   toDos.forEach(item => {
     let row = listTable.insertRow(-1);
-    let idCell = document.createElement('td');
-    idCell.setAttribute('class', 'd-none');
-    idCell.innerText=item.id;
-    row.appendChild(idCell);
     let isDoneCell = document.createElement('td');
     let isDoneCheckbox = document.createElement('input');
     isDoneCheckbox.setAttribute('type', 'checkbox');
+    isDoneCheckbox.setAttribute('data-id', item.id);
     if (item.done) {
       isDoneCheckbox.setAttribute('checked', 'true');
     }
@@ -30,6 +27,11 @@ function renderTodos(toDos) {
     deleteButton.setAttribute('type', 'button');
     deleteButton.setAttribute('value', 'delete');
     deleteButton.setAttribute('class', 'btn btn-primary');
+    deleteButton.setAttribute('data-id', item.id);
+    deleteButton.addEventListener("click", event => {
+      event.preventDefault();
+      console.log(event.target);
+    });
     deleteCell.appendChild(deleteButton);
     row.appendChild(createSimpleCell(item.title));
     row.appendChild(createSimpleCell(item.dueDate));
