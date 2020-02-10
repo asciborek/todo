@@ -30,7 +30,15 @@ function renderTodos(toDos) {
     deleteButton.setAttribute('data-id', item.id);
     deleteButton.addEventListener("click", event => {
       event.preventDefault();
-      console.log(event.target);
+      let itemId = event.target.dataset.id;
+      let row = event.target.parentElement.parentElement;
+      fetch('todos/' + itemId, {
+        method: 'DELETE'
+      }).then(response => {
+        if (response.status === 204) {
+          row.remove();
+        }
+      })
     });
     deleteCell.appendChild(deleteButton);
     row.appendChild(createSimpleCell(item.title));
@@ -62,7 +70,7 @@ function serializeForm() {
 submitForm.addEventListener("click", event => {
   event.preventDefault();
   let json = serializeForm();
-  fetch ('/todos', {
+  fetch('/todos', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
