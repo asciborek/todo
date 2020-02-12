@@ -1,6 +1,6 @@
 import {TodoService, ERROR} from "./todo-service.js";
 
-class ToDosList {
+class ToDosListComponent {
   todoService;
   submitForm = document.getElementById('submitForm');
   listTable = document.getElementById('list');
@@ -42,24 +42,26 @@ class ToDosList {
     deleteButton.setAttribute('value', 'delete');
     deleteButton.setAttribute('class', 'btn btn-primary');
     deleteButton.setAttribute('data-id', item.id);
-    deleteButton.addEventListener("click", event => {
-      event.preventDefault();
-      let itemId = event.target.dataset.id;
-      let row = event.target.parentElement.parentElement;
-      fetch('todos/' + itemId, {
-        method: 'DELETE'
-      }).then(response => {
-        if (response.status === 204) {
-          row.remove();
-        }
-      })
-    });
+    deleteButton.addEventListener("click", event => this.removeItem(event));
     deleteCell.appendChild(deleteButton);
     row.appendChild(this.createSimpleCell(item.title));
     row.appendChild(this.createSimpleCell(item.dueDate));
     row.appendChild(this.createSimpleCell(item.priority.toLowerCase()));
     row.appendChild(isDoneCell);
     row.appendChild(deleteCell);
+  }
+
+  removeItem(event) {
+    event.preventDefault();
+    let itemId = event.target.dataset.id;
+    let row = event.target.parentElement.parentElement;
+    fetch('todos/' + itemId, {
+      method: 'DELETE'
+    }).then(response => {
+      if (response.status === 204) {
+        row.remove();
+      }
+    })
   }
 
   createSimpleCell(value) {
@@ -82,6 +84,6 @@ class ToDosList {
 }
 
 const todoService = new TodoService();
-const todoComponent = new ToDosList(todoService);
+const todoComponent = new ToDosListComponent(todoService);
 todoComponent.loadContent();
 
