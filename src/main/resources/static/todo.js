@@ -1,17 +1,19 @@
+import {TodoService, SUCCESS, ERROR} from "./todo-service.js";
+
+const todoService = new TodoService();
 const submitForm = document.getElementById('submitForm');
-const listTable = document.getElementById('list')
+const todoForm = document.getElementById('todoForm');
+const listTable = document.getElementById('list');
 
-loadTodos();
 
-function loadTodos() {
-  fetch('/todos').then(response => {
-    if (response.status === 200) {
-      response.json().then(toDos => renderTodos(toDos))
-    }
-  })
+
+loadContent();
+
+function loadContent() {
+  todoService.readAll().then(content => renderList(content));
 }
 
-function renderTodos(toDos) {
+function renderList(toDos) {
   toDos.forEach(item => {
     let row = listTable.insertRow(-1);
     let isDoneCell = document.createElement('td');
@@ -69,16 +71,8 @@ function serializeForm() {
 
 submitForm.addEventListener("click", event => {
   event.preventDefault();
-  let json = serializeForm();
-  fetch('/todos', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: json
-  }).then(response => {
-    console.log(response.status)
-  });
+  const data = serializeForm();
+  todoService.create(data);
 });
 
 
