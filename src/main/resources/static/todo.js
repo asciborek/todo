@@ -1,21 +1,30 @@
-import {TodoService, SUCCESS, ERROR} from "./todo-service.js";
-
-const todoService = new TodoService();
-const submitForm = document.getElementById('submitForm');
-const todoForm = document.getElementById('todoForm');
-const listTable = document.getElementById('list');
+import {TodoService} from "./todo-service.js";
 
 
+class ToDosList {
+  todoService;
+  submitForm = document.getElementById('submitForm');
+  listTable = document.getElementById('list');
 
-loadContent();
+  constructor(todoService) {
+    this.todoService = todoService;
+    this.submitForm.addEventListener("click", event => {
+      event.preventDefault();
+      const data = this.serializeForm();
+      this.todoService.create(data);
+    });
+  }
 
-function loadContent() {
-  todoService.readAll().then(content => renderList(content));
-}
+  loadContent() {
+    this.todoService.readAll().then(content => this.renderList(content));
+  }
 
-function renderList(toDos) {
-  toDos.forEach(item => {
-    let row = listTable.insertRow(-1);
+  renderList(toDos) {
+    toDos.forEach(item => this.appendItem(item));
+  }
+
+  appendItem(item) {
+    let row = this.listTable.insertRow(-1);
     let isDoneCell = document.createElement('td');
     let isDoneCheckbox = document.createElement('input');
     isDoneCheckbox.setAttribute('type', 'checkbox');
@@ -43,37 +52,34 @@ function renderList(toDos) {
       })
     });
     deleteCell.appendChild(deleteButton);
-    row.appendChild(createSimpleCell(item.title));
-    row.appendChild(createSimpleCell(item.dueDate));
-    row.appendChild(createSimpleCell(item.priority.toLowerCase()));
+    row.appendChild(this.createSimpleCell(item.title));
+    row.appendChild(this.createSimpleCell(item.dueDate));
+    row.appendChild(this.createSimpleCell(item.priority.toLowerCase()));
     row.appendChild(isDoneCell);
     row.appendChild(deleteCell);
-  });
+  }
+
+  createSimpleCell(value) {
+    let cell = document.createElement('td');
+    cell.innerText = value;
+    return cell;
+  }
+
+  serializeForm() {
+    let date = document.getElementById('dueDate').value;
+    let time = document.getElementById('dueTime').value;
+    let dueDate = date + 'T' + time;
+    let data = {
+      title: document.getElementById('title').value,
+      dueDate: dueDate,
+      priority: document.getElementById('priorityFormSelect').value
+    };
+    return JSON.stringify(data);
+  }
 }
 
-function createSimpleCell(value) {
-  let cell = document.createElement('td');
-  cell.innerText = value;
-  return cell;
-}
 
-function serializeForm() {
-  let date = document.getElementById('dueDate').value;
-  let time = document.getElementById('dueTime').value;
-  let dueDate = date + 'T' + time;
-  let data = {
-    title: document.getElementById('title').value,
-    dueDate: dueDate,
-    priority: document.getElementById('priorityFormSelect').value
-  };
-  return JSON.stringify(data);
-}
-
-submitForm.addEventListener("click", event => {
-  event.preventDefault();
-  const data = serializeForm();
-  todoService.create(data);
-});
-
-
+const todoService = new TodoService();
+const todoComponent = new ToDosList(todoService);
+todoComponent.loadContent();
 
