@@ -22,7 +22,8 @@ export class TodoService {
       body: data
     }).then(response => {
       if (response.status === 201) {
-        return Promise.resolve(response.headers.get('Location'));
+        const locate = response.headers.get('Location');
+        return this.getNewToDo(locate);
       } else {
         return Promise.resolve(ERROR);
       }
@@ -31,4 +32,9 @@ export class TodoService {
     });
   }
 
+  getNewToDo(locate) {
+    return fetch(locate)
+      .then(response => response.json())
+      .catch(_ => ERROR);
+  }
 }

@@ -1,5 +1,4 @@
-import {TodoService} from "./todo-service.js";
-
+import {TodoService, ERROR} from "./todo-service.js";
 
 class ToDosList {
   todoService;
@@ -11,7 +10,11 @@ class ToDosList {
     this.submitForm.addEventListener("click", event => {
       event.preventDefault();
       const data = this.serializeForm();
-      this.todoService.create(data);
+      this.todoService.create(data).then(result => {
+        if (result !== ERROR) {
+          this.appendItem(result);
+        }
+      });
     });
   }
 
@@ -77,7 +80,6 @@ class ToDosList {
     return JSON.stringify(data);
   }
 }
-
 
 const todoService = new TodoService();
 const todoComponent = new ToDosList(todoService);
