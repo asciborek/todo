@@ -19,11 +19,10 @@ export class TodoService {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: data
+      body: JSON.stringify(data)
     }).then(response => {
       if (response.status === 201) {
-        const locate = response.headers.get('Location');
-        return this.getNewToDo(locate);
+        return response.json();
       } else {
         return Promise.resolve(ERROR);
       }
@@ -32,9 +31,4 @@ export class TodoService {
     });
   }
 
-  getNewToDo(locate) {
-    return fetch(locate)
-      .then(response => response.json())
-      .catch(_ => ERROR);
-  }
 }

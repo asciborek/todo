@@ -22,12 +22,12 @@ class ToDoController(private val dao: TodoDAO) {
     }
 
     @PostMapping("/todos")
-    fun create(@RequestBody toDo: ToDo, uriBuilder: UriComponentsBuilder): ResponseEntity<Unit> {
+    fun create(@RequestBody toDo: ToDo, uriBuilder: UriComponentsBuilder): ResponseEntity<Int> {
         val id = dao.save(toDo)
         val location = uriBuilder.path("/todos/{id}").buildAndExpand(id).toUri()
         val headers = HttpHeaders()
         headers.location = location
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(id, headers, HttpStatus.CREATED)
     }
 
     @PatchMapping("/todos/{id}")

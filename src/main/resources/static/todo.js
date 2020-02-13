@@ -12,7 +12,8 @@ class ToDosListComponent {
       const data = this.serializeForm();
       this.todoService.create(data).then(result => {
         if (result !== ERROR) {
-          this.appendItem(result);
+          data.id =result;
+          this.appendItem(data);
         }
       });
     });
@@ -74,12 +75,11 @@ class ToDosListComponent {
     let date = document.getElementById('dueDate').value;
     let time = document.getElementById('dueTime').value;
     let dueDate = date + 'T' + time;
-    let data = {
+    return  {
       title: document.getElementById('title').value,
       dueDate: dueDate,
       priority: document.getElementById('priorityFormSelect').value
     };
-    return JSON.stringify(data);
   }
 }
 
