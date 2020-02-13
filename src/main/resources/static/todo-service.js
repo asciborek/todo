@@ -41,4 +41,15 @@ export class TodoService {
     })
   }
 
+  setDone(id, done) {
+    const url = '/todos/' + id + "?done=" + done;
+    return fetch(url, {
+      method: 'PATCH'
+    }).then(response => {
+      if (response.status === 204) {
+        return SUCCESS;
+      }
+    });
+  }
+
 }

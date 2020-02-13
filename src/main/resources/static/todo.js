@@ -37,6 +37,7 @@ class ToDosListComponent {
     if (item.done) {
       isDoneCheckbox.setAttribute('checked', 'true');
     }
+    isDoneCheckbox.addEventListener('change', event => this.changeDoneFlag(event))
     isDoneCell.appendChild(isDoneCheckbox);
     const deleteCell = document.createElement('td');
     const deleteButton = document.createElement('input');
@@ -51,6 +52,21 @@ class ToDosListComponent {
     row.appendChild(this.createSimpleCell(item.priority.toLowerCase()));
     row.appendChild(isDoneCell);
     row.appendChild(deleteCell);
+  }
+
+  changeDoneFlag(event) {
+    const itemId = event.target.dataset.id;
+    const checkbox = event.target;
+    const isChecked = checkbox.checked;
+    console.log(isChecked);
+    todoService.setDone(itemId, isChecked)
+      .then(value => {
+        if (value !== SUCCESS) {
+          checkbox.checked = !isChecked;
+        }
+      }).catch(_ => {
+        checkbox.checked = !isChecked;
+      });
   }
 
   removeItem(event) {
