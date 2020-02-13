@@ -31,4 +31,14 @@ export class TodoService {
     });
   }
 
+  delete(id) {
+    return fetch('todos/' + id, {
+      method: 'DELETE'
+    }).then(response => {
+      if (response.status === 204) {
+        return SUCCESS;
+      }
+    })
+  }
+
 }

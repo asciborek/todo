@@ -1,4 +1,4 @@
-import {TodoService, ERROR} from "./todo-service.js";
+import {TodoService, SUCCESS, ERROR} from "./todo-service.js";
 
 class ToDosListComponent {
   todoService;
@@ -57,13 +57,11 @@ class ToDosListComponent {
     event.preventDefault();
     const itemId = event.target.dataset.id;
     const row = event.target.parentElement.parentElement;
-    fetch('todos/' + itemId, {
-      method: 'DELETE'
-    }).then(response => {
-      if (response.status === 204) {
+    todoService.delete(itemId).then(value => {
+      if (value === SUCCESS) {
         row.remove();
       }
-    })
+    });
   }
 
   createSimpleCell(value) {
