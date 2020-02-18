@@ -1,5 +1,6 @@
-package com.github.asciborek.todolist
+package com.github.asciborek.todolist.api
 
+import com.github.asciborek.todolist.ToDo
 import com.github.asciborek.todolist.dao.TodoDAO
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
