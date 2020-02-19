@@ -15,7 +15,7 @@ class ReportController(generators: List<ReportGenerator>) {
 
     companion object {
         private val MEDIA_TYPE_CSV = MediaType.parseMediaType("text/csv")
-        val extensionsMediaTypes = mapOf(Extension.CSV to MEDIA_TYPE_CSV);
+        val extensionsMediaTypes = mapOf(Extension.CSV to MEDIA_TYPE_CSV, Extension.PDF to MediaType.APPLICATION_PDF);
     }
 
     init {

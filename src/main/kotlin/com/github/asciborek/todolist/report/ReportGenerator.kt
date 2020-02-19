@@ -9,5 +9,5 @@ interface ReportGenerator {
 }
 
 enum class Extension {
-    CSV;
+    CSV, PDF;
 }
