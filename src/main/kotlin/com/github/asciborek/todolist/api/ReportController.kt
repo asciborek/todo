@@ -2,6 +2,8 @@ package com.github.asciborek.todolist.api
 
 import com.github.asciborek.todolist.report.Extension
 import com.github.asciborek.todolist.report.ReportGenerator
+import org.springframework.http.ContentDisposition
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,8 +28,14 @@ class ReportController(generators: List<ReportGenerator>) {
     fun generateReport(@RequestParam fileExtension: String): ResponseEntity<ByteArray> {
         val extension = Extension.valueOf(fileExtension.toUpperCase());
         val generator = generators[extension] ?: throw IllegalStateException()
+        val disposition = ContentDisposition.builder("attachment")
+                .filename("report.${extension.fileExtension}")
+                .build()
+        val headers = HttpHeaders()
+        headers.contentDisposition = disposition;
         return ResponseEntity.ok()
                 .contentType(extensionsMediaTypes.getOrDefault(extension, defaultValue = MediaType.ALL))
+                .headers(headers)
                 .body(generator.createReport())
     }
 
